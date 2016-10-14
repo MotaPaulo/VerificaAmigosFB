@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                                 //os dados estão dentro desse array!!
                                 System.out.println("jsonArray: " +  array.optString(1));
 
-
+                                //aqui são alguns dados de resposta
                                 System.out.println("GraphResponse "+ response);
                             }
                         });
