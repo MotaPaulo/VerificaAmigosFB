@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         new GraphRequest.GraphJSONArrayCallback() {
                             @Override
                             public void onCompleted(JSONArray array, GraphResponse response) {
-                                //os dados estão dentro desse array
+                                //os dados estão dentro desse array!!
                                 System.out.println("jsonArray: " +  array.optString(1));
 
 
