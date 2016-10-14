@@ -25,8 +25,10 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.server.converter.StringToIntConverter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         mCallbackManager = CallbackManager.Factory.create();
 
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends","user_likes","user_posts"));
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -57,16 +59,18 @@ public class MainActivity extends AppCompatActivity {
                         new GraphRequest.GraphJSONArrayCallback() {
                             @Override
                             public void onCompleted(JSONArray array, GraphResponse response) {
-                                //os dados estão dentro desse array!!
-                                System.out.println("jsonArray: " +  array.optString(1));
-
+                                JSONObject object = response.getJSONObject();
+                                JSONObject summary = object.optJSONObject("summary");
+                                Log.d("Summary",summary.optString("total_count"));
+                                JSONArray listfriends = object.optJSONArray("data");
+                                Log.d("listfriends",listfriends.length()+"");
                                 //aqui são alguns dados de resposta
                                 System.out.println("GraphResponse "+ response);
                             }
                         });
 
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,picture{url},posts,devices{os},likes{category,name,id},events{place{location{city}},rsvp_status}");
+                parameters.putString("fields", "id,name,picture,posts,devices{os},likes{category,name,id},events{place{location{city}},rsvp_status}");
                 request.setParameters(parameters);
                 request.executeAsync();
 
